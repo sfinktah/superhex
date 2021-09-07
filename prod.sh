@@ -12,6 +12,17 @@ version=${version%.tar.gz}
 echo $version
 twine check "$lastfile"
 twine upload "$lastfile"
+repo_name=superhex
+test -e .git || {
+    git-repo $repo_name
+    git add LICENSE.txt README.rst setup.py version.txt test.sh prod.sh $repo_name/*.py
+    git commit -m 'first commit'
+    git push
+}
+git add -u
+git add $repo_name/*.py
+git commit -m "$(cat version.txt)"
+git push
 sleep 10
 python -m pip install hex==$version
 
